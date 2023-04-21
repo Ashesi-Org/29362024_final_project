@@ -1,0 +1,5 @@
+1) decided to change post structure because there is a trade off between
+    a) querying the server to get the user details
+    b) increasing the space complexity.
+    i decided to go with a bebcause when i implemented futurebuilder inside stream builder, it was taking too long
+    cz of queries
