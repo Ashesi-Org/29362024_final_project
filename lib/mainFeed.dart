@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
+// import 'package:firebase_image/firebase_image.dart';
 
 
 var userDetailsMap;
@@ -80,7 +81,7 @@ class _mainFeedState extends State<mainFeed> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     final Stream<QuerySnapshot> usersStream =
-    FirebaseFirestore.instance.collection('posts').snapshots();
+    FirebaseFirestore.instance.collection('posts').orderBy('posttime', descending: true).snapshots();
 
 
 
@@ -102,73 +103,86 @@ class _mainFeedState extends State<mainFeed> {
               final email = data['email'] as String;
               final postText = data['text'] as String;
               final hasImage = data['hasimage'] as String;
-              final imageurl = data['imageurl'] as String;
-              final imagename = data['imagename'] as String;
-              passer(imagename);
+              var imageurl;
+              var imagename;
+              if (hasImage == "true"){
+                imageurl = data['imageurl'] as String;
+                imagename = data['imagename'] as String;}
+
+
+              // passer(imagename);
+              // print(imageurl);
               // globalPostContent = data['text'].toString() as String;
               // globalHasImage = data['hasimage'].toString() as String;
 
 
-
-
-              final storageRef = FirebaseStorage.instance.ref();
-              final httpsReference = FirebaseStorage.instance.refFromURL(imageurl);
-
-
-
               StreamController<String> streamController = StreamController();
-
-
 
               // Stream imageStream = currentUserStream(imagename);
 
                         // Use the user object returned by getuser() and data from the stream snapshot
-                        return Card(
-                          child: Column(
-                            children: [
-                              Row(
+                        return Column(
+                          children: [
+                            Card(
+                              child: Column(
                                 children: [
-                                  SizedBox(width: 10,),
-                                  ProfilePicture(
-                                    name: name,
-                                    radius: 22,
-                                    fontsize: 17,
-                                    random: true,
-                                    role: email ,
-                                    tooltip: true,
+                                  Row(
+                                    children: [
+                                      SizedBox(width: 10,),
+                                      ProfilePicture(
+                                        name: name,
+                                        radius: 22,
+                                        fontsize: 17,
+                                        random: true,
+                                        role: email ,
+                                        tooltip: true,
+                                      ),
+                                      Expanded(
+                                        child: ListTile(
+                                          title: Text(name,
+                                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                                          subtitle: Text("$email · $posttime",
+                                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),),
+                                        ),
+                                      ),
+                                      IconButton(
+                                        icon: Icon(Icons.person_add_alt_1),
+                                        tooltip: "Send $name a friend request",
+                                        onPressed: () {
+                                          // TODO: add http request
+                                        },
+                                      ),
+                                    ],
                                   ),
-                                  Expanded(
-                                    child: ListTile(
-                                      title: Text(name,
-                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                                      subtitle: Text("$email · $posttime",
-                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                                  const Divider(
+                                    thickness: 1,
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
+                                      child: Text(postText,
+                                      textAlign: TextAlign.left,),
                                     ),
                                   ),
-                                  IconButton(
-                                    icon: Icon(Icons.person_add_alt_1),
-                                    tooltip: "Send $name a friend request",
-                                    onPressed: () {
-                                      // TODO: add http request
-                                    },
+                                  if (hasImage == "true")
+                                  Image.network(
+                                    imageurl,
+                                  fit: BoxFit.cover,
                                   ),
+
                                 ],
                               ),
-                              const Divider(
-                                thickness: 1,
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(postText),
-                              Image.network(
-                                imageurl,
-                              fit: BoxFit.cover,
-                              ),
-
-                            ],
-                          ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            )
+                          ],
                         );
+
             }).toList();
             return ListView(
             children: users
