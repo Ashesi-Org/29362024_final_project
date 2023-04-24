@@ -84,7 +84,6 @@ class _mainFeedState extends State<mainFeed> {
     FirebaseFirestore.instance.collection('posts').orderBy('posttime', descending: true).snapshots();
 
 
-
     return  Container(
       color: Colors.blueGrey.shade50,
       child: Container(

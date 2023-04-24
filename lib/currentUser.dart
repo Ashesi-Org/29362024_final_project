@@ -1,25 +1,64 @@
+import 'package:final_project/profilecard.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'dataHandler.dart';
+import 'dataHandler.dart';
+import 'dataHandler.dart';
 import 'firebase_options.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
+import 'profilecard.dart';
 
 
 class currentUser extends StatefulWidget {
   const currentUser({Key? key}) : super(key: key);
+  // final dataHandler newHandler;
+
+  // currentUser({required this.newHandler});
+
 
   @override
   State<currentUser> createState() => _currentUserState();
 }
 
 class _currentUserState extends State<currentUser> {
+  final currentUserEmailController = TextEditingController();
+  String currentEmail = '';
+
+  void updateEmail(String email) {
+    setState(() {
+      currentEmail = email;
+      // sendData();
+    });
+  }
+
+  // void sendData() {
+  //   dataHandler passMe = dataHandler(email: currentEmail);
+  //   receiveData(passMe);
+  //
+  //   return;
+  // }
+
+  String userData = '';
+  //
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   userData = '...'; // get user data
+  //   widget.newHandler.setData(userData);
+  // }
+
+
 
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+
+    // passing the current email to the profile card
+    // profilecard(email: currentEmail);
 
     return Card(
       // color: Colors.lightBlue.shade300,
@@ -28,6 +67,7 @@ class _currentUserState extends State<currentUser> {
 
       ),
       child: Container(
+
         // color: Colors.lightBlue.shade300,
         width: screenWidth * 0.2,
         height: 100,
@@ -50,6 +90,7 @@ class _currentUserState extends State<currentUser> {
                     children: [
                       Expanded(
                         child: TextFormField(
+                          controller: currentUserEmailController, //email controller
                           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                           decoration: InputDecoration(
                             isDense: true,
@@ -66,6 +107,7 @@ class _currentUserState extends State<currentUser> {
                         padding: EdgeInsets.only(bottom: 2.0),
                         tooltip: "Confirm account switch",
                         onPressed: (){
+                          updateEmail(currentUserEmailController.text); //pass value to update email
 
                         },
                       )
@@ -78,5 +120,6 @@ class _currentUserState extends State<currentUser> {
           ),
         ),
       );
+
   }
 }
