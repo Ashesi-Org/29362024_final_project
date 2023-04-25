@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 
+//////////////////////// NO LONGER IN USE ///////////////////////////////
 
 class friendscard extends StatefulWidget {
   const friendscard({Key? key}) : super(key: key);
@@ -15,6 +16,11 @@ class friendscard extends StatefulWidget {
 }
 
 class _friendscardState extends State<friendscard> {
+  /*** A class that uses a serverless method to display a persons friends list. Connects
+   * directly to firestore without the use of an API
+   */
+
+  // Stream to connect to the users data base
   final Stream<QuerySnapshot> usersStream =
   FirebaseFirestore.instance.collection('users').orderBy("name",descending: true).snapshots();
 

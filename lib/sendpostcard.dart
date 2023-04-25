@@ -26,6 +26,12 @@ class sendPostCard extends StatefulWidget {
 }
 
 class _sendPostCardState extends State<sendPostCard> {
+  /*** A class that is responsible for the posts sections of the app.
+   * creates a form data request using dio and selects an image from the users
+   * pc. Request is then built and sent
+   */
+
+  // Variables for state management
   final posterEmailControler = TextEditingController();
   final postContentControler = TextEditingController();
   String posterEmail = '';
@@ -35,70 +41,40 @@ class _sendPostCardState extends State<sendPostCard> {
   final ImagePicker picker = ImagePicker();
   XFile? image;
 
-  // final ImagePicker _picker = ImagePicker();
 
 
-
+  // function that updates the email and post content
   void updatePostContent(String email, String postcontent) {
     setState(() {
       posterEmail = email;
       postContent = postcontent;
-      // sendData();
     });
   }
 
+  // Function that selects the users image
   Future<void> selectImage() async {
     final result = await FilePicker.platform.pickFiles(type: FileType.image);
     if (result != null) {
       final file = result.files.single;
-      final fileBytes = file.bytes!;
+      // final fileBytes = file.bytes!;
       final fileName = file.name;
-      final filePath = file.path; // or file.path
+      final filePath = file.path;
       imageName = fileName;
+
+      //Set state after selecting image
       setState(() {
         postImage = File(filePath as List<Object>, fileName);
       });
-      // print("the image name is " + imageName);
+
     }
   }
 
 
-
-  // Future<String> sendPost(String email, String postContent, {XFile? imageFile}) async {
-  //   var request = http.MultipartRequest('POST', Uri.parse('https://us-central1-ashesistream-383012.cloudfunctions.net/streamPosts/posts'));
-  //   print("abount to send request");
-  //   // add text field to request
-  //   request.fields['text'] = postContent;
-  //   request.fields['email'] = email;
-  //   if(imageFile != null) {
-  //     final bytes = imageFile.readAsBytes();
-  //     request.fields['hasimage'] = "true";
-  //     request.fields['imagename'] = imageFile.name;
-  //     request.fields['image'] = imageFile.path;
-  //     request.files.add(await http.MultipartFile.fromBytes('file', imageFile.path));
-  //   }else{
-  //     request.fields['hasimage'] = "false";
-  //   }
-  //   print("request sent to post");
-  //   // send the request
-  //   var response = await request.send();
-  //   print(request.fields);
-  //   // read the response
-  //   var responseText = await response.stream.bytesToString();
-  //
-  //   // check if the response was successful
-  //   if (response.statusCode == 200) {
-  //     return responseText;
-  //   } else {
-  //     throw Exception('Failed to upload file');
-  //   }
-  // }
-
+  // Function that makes the form-data post request
   static void uploadPost(String email, String postContent, {XFile? imageFile}) async{
     FormData formData;
     final dio = Dio();
 
-    // imageFile.r
     //if there is no image
      if(imageFile == null){
        formData = FormData.fromMap({
@@ -107,7 +83,6 @@ class _sendPostCardState extends State<sendPostCard> {
          "hasimage" : 'false',
        });
      }else {
-       // String? imagePath = imageFile?.path;
        final bytes = await imageFile.readAsBytes();
        formData = FormData.fromMap({
          "text": postContent,
@@ -115,17 +90,19 @@ class _sendPostCardState extends State<sendPostCard> {
          "hasimage": 'true',
          "image": await MultipartFile.fromBytes(bytes, filename: imageFile.name),
          "imagename": imageFile.name,
-       });
+       }
+       );
        }
      print(formData.fields);
-    // dio.p
+
+     // make the post
     final response = await dio.post("https://us-central1-ashesistream-383012.cloudfunctions.net/streamPosts/posts", data:formData);
      print(response.data);
 
   }
 
-  //
 
+  // Building the post widget
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -142,7 +119,8 @@ class _sendPostCardState extends State<sendPostCard> {
             children: [
               ListTile(
                 title: const Text('New Post',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)
+                ),
                 subtitle: Text(
                     'Share a new post with your friends!',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)
@@ -153,12 +131,11 @@ class _sendPostCardState extends State<sendPostCard> {
                 child: Column(
                   children: [
                     SizedBox(
-                      height: 32, // <-- Set half the desired height here
+                      height: 32,
                       child: TextFormField(
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                         controller: posterEmailControler,
                         decoration: InputDecoration(
-                          // color: Colors.blueGrey.shade50,
                           labelText: 'Email',
                           border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.greenAccent),
@@ -173,7 +150,6 @@ class _sendPostCardState extends State<sendPostCard> {
                       controller: postContentControler,
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                       maxLines: 8,
-                      // initialValue: 'Type your next post here!',
                       decoration: InputDecoration(
                         labelText: 'Post Content',
                         border: OutlineInputBorder(
@@ -195,8 +171,6 @@ class _sendPostCardState extends State<sendPostCard> {
                           icon: Icon(Icons.image),
                           tooltip: "Attach an Image",
                           onPressed: ()  async {
-                            // selectImage();
-
                             image = await picker.pickImage(source: ImageSource.gallery);
                             print(image?.name);
                             setState(() {
@@ -219,7 +193,6 @@ class _sendPostCardState extends State<sendPostCard> {
                               imageName = "";
                               image = null;
                             });
-
                           },
                         ),
                       ],

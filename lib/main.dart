@@ -22,11 +22,7 @@ import 'signUp.dart';
 
 
 void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await dotenv.load(fileName: ".env"); // Load the environment variables
-  // String apiKey = dotenv.env['FIREBASE_API_KEY']!; // Get the API key
-  // // Initialize Firebase with the API key
-  // await Firebase.initializeApp();
+
 
   // Initialize firebase
   await Firebase.initializeApp(
@@ -34,21 +30,10 @@ void main() async {
   );
 
 
-
-  // FirebaseFirestore db = FirebaseFirestore.instance;
-  //
-  // CollectionReference users = db.collection('users');
-  // QuerySnapshot querySnapshot = await users.get();
-  // List<QueryDocumentSnapshot> documents = querySnapshot.docs;
-  // for (var document in documents) {
-  //   print(document.data());
-  // }
-
   runApp(MaterialApp(
     title: "Ashesi Stream",
     // home: signUpPage(),
     home: ThreeColumnLayout(),
-
       theme: ThemeData(
         dividerTheme: const DividerThemeData(
           space: 0, // set vertical space to 0
@@ -64,13 +49,7 @@ class ThreeColumnLayout extends StatefulWidget {
 }
 
 class _ThreeColumnLayoutState extends State<ThreeColumnLayout> {
-  // late dataHandler handleMe; // declare dataHandler as a late variable
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   handleMe = dataHandler(); // initialize dataHandler in initState
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -113,9 +92,7 @@ class _ThreeColumnLayoutState extends State<ThreeColumnLayout> {
             child: Center(
               child: Column(
                 children: [
-                  // SizedBox(height: 16,),
-                  // currentUser(),
-                  // SizedBox(height: 8),
+
                   Center(
 
                     child: Column(
@@ -123,6 +100,7 @@ class _ThreeColumnLayoutState extends State<ThreeColumnLayout> {
                       children: [
                         Container(
                             width: screenWidth * 0.20,
+                            // Show profile card
                             child: profilecard(),
                         ),
                       ],
@@ -151,12 +129,11 @@ class _ThreeColumnLayoutState extends State<ThreeColumnLayout> {
 
                                   width: screenWidth *0.25,
                                     height: screenHeight * 0.66,
+                                    // show sign up page
                                     child: signUpPage()),
                               );
                             },
                           );
-
-
                         },
                         text: "Need an account? Sign up!",
                         // hoverColor: Colors.green,

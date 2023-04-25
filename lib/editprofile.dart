@@ -71,7 +71,7 @@ class _editprofilecardState extends State<editprofilecard> {
   String emailIn="";
   var data;
 
-  // text controllers for assgning 
+  // text controllers for the form
   late TextEditingController majorController;
   late TextEditingController yeargroupController;
   late TextEditingController residenceController;
@@ -79,12 +79,6 @@ class _editprofilecardState extends State<editprofilecard> {
   late TextEditingController foodController;
   late TextEditingController movieController;
 
-  // majorController = TextEditingController(text: majorIn);
-  // yeargroupController = TextEditingController(text: yeargroupIn);
-  // residenceController = TextEditingController(text: residenceIn);
-  // dateofBirthController = TextEditingController(text: dobIn);
-  // foodController = TextEditingController(text: foodIn);
-  // movieController = TextEditingController(text: movieIn);
 
   void initState(){
     super.initState();
@@ -93,20 +87,7 @@ class _editprofilecardState extends State<editprofilecard> {
     foodIn = "";
     data;
   }
-  //
-  // void setPatchFields(String major, String food, String movie, String residence, String yeargroup, String dob) {
-  //   print("The user emaial is " + userEmail);
-  //   setState(() {
-  //     majorIn = major;
-  //     foodIn = food;
-  //     movieIn = movie;
-  //     residenceIn = residence;
-  //     yeargroupIn = yeargroup;
-  //     dobIn = dob;
-  //     // userEmail = widget.userEmail;
-  //
-  //   });
-  // }
+
 
   @override
   Widget build(BuildContext context) {
@@ -121,58 +102,34 @@ class _editprofilecardState extends State<editprofilecard> {
     movieController = TextEditingController(text: movieIn);
 
 
-    // void uploadPost(String name,String email,String major,String year,
-    //     String id, String residence, String dob, String movie,String food ) async{
-    //
-    //   final dio = Dio();
-    //   Map<String, String> userData = {
-    //     "dob":dob,
-    //     "email":email,
-    //     "food":food,
-    //     "id":id,
-    //     "major":major,
-    //     "movie":movie,
-    //     "name":name,
-    //     "residence":residence,
-    //     "yeargroup":year
-    //   };
-    //
-    //   final response = await dio.post("https://us-central1-ashesistream-383012.cloudfunctions.net/streamUsers/users", data:userData);
-    //   print(response.data);
-    // }
-
 
     void getUserData(String currentEmail) async {
+      /*** A method to get the users current data and populate the edit form ***/
+
+      final Map<String, dynamic> data;
+
       String apiLink = "https://us-central1-ashesistream-383012.cloudfunctions.net/streamUsers/users?email=";
       String apiRequest = apiLink + currentEmail;
       final userData = await http.get(Uri.parse(apiRequest));
-      final Map<String, dynamic> data;
 
-      // print("Got response");
       if (userData.statusCode == 200) {
         data = jsonDecode(userData.body);
-        // print(data);
-        // return data;
       } else {
-        print('Request failed with status: ${userData.statusCode}.');
+        print(userData.statusCode);
         return null;
       }
 
-      // setState(() {
+      // Set the text fields to the data that was jus fetched
         yeargroupController.text = data['yeargroup'].toString() as String; //
         foodController.text = data['food'] as String; //
         majorController.text = data['major'] as String; //
         movieController.text = data['movie'] as String; //
         residenceController.text = data['residence'].toString() as String;
         dateofBirthController.text = data['dob'] as String;
-      // });
     }
 
+    // function call to get the users data
     getUserData(userEmail);
-
-
-
-
 
 
 
@@ -201,11 +158,8 @@ class _editprofilecardState extends State<editprofilecard> {
                         width: 350,
                         child: TextFormField(
                           controller: majorController,
-                          // initialValue: majorIn,
                           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                          // controller: posterEmailControler,
                           decoration: InputDecoration(
-                            // color: Colors.blueGrey.shade50,
                             labelText: 'Major',
                             enabled: true,
                             border: OutlineInputBorder(
@@ -225,9 +179,7 @@ class _editprofilecardState extends State<editprofilecard> {
                         width: 350,
                         child: TextFormField(
                           controller: yeargroupController,
-                          // initialValue: data?['yeargroup'] as String,
                           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                          // controller: posterEmailControler,
                           decoration: InputDecoration(
                             // color: Colors.blueGrey.shade50,
                             labelText: 'Year Group',
@@ -248,11 +200,8 @@ class _editprofilecardState extends State<editprofilecard> {
                         width: 350,
                         child: TextFormField(
                           controller: residenceController,
-                          // initialValue: data?['Residence'] as String,
                           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                          // controller: posterEmailControler,
                           decoration: InputDecoration(
-                            // color: Colors.blueGrey.shade50,
                             labelText: 'Residence',
                             border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.greenAccent),
@@ -271,11 +220,8 @@ class _editprofilecardState extends State<editprofilecard> {
                         width: 350,
                         child: TextFormField(
                           controller: dateofBirthController,
-                          // initialValue: data?['dob'] as String,
                           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                          // controller: posterEmailControler,
                           decoration: InputDecoration(
-                            // color: Colors.blueGrey.shade50,
                             labelText: 'Date of Birth',
                             border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.greenAccent),
@@ -294,11 +240,8 @@ class _editprofilecardState extends State<editprofilecard> {
                         width: 350,
                         child: TextFormField(
                           controller: movieController,
-                          // initialValue: data?['movie'] as String,
                           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                          // controller: posterEmailControler,
                           decoration: InputDecoration(
-                            // color: Colors.blueGrey.shade50,
                             labelText: 'Favorite Movie',
                             border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.greenAccent),
@@ -317,11 +260,8 @@ class _editprofilecardState extends State<editprofilecard> {
                         width: 350,
                         child: TextFormField(
                           controller: foodController,
-                          // initialValue: data?['food'] as String,
                           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                          // controller: posterEmailControler,
                           decoration: InputDecoration(
-                            // color: Colors.blueGrey.shade50,
                             labelText: 'Favorite Food',
                             border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.greenAccent),
@@ -343,7 +283,7 @@ class _editprofilecardState extends State<editprofilecard> {
                           setState(() {
                             userEmail = widget.userEmail;
                           });
-                          // performPatch(emailIn, majorIn, foodIn, movieIn, residenceIn, yeargroupIn, dobIn);
+                          // Update user details and refresh the edit form
                           newPatch(userEmail, majorController.text, foodController.text,
                               movieController.text, residenceController.text, yeargroupController.text, dateofBirthController.text);
                           getUserData(userEmail);

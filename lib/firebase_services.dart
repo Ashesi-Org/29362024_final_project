@@ -11,9 +11,9 @@ import 'userModel.dart';
 FirebaseFirestore db = FirebaseFirestore.instance;
 
 Stream<List<UserModel>> getUsers() {
-  return db.collection('users') //connect to users db
-      .snapshots() //get snapshot of users collection
-      .map((snapShot) => snapShot.docs //get a map of all the docs in the collection
-      .map((document) => UserModel.fromJson(document.data())) //call usermodel method to convert
+  return db.collection('users')
+      .snapshots()
+      .map((snapShot) => snapShot.docs
+      .map((document) => UserModel.fromJson(document.data()))
       .toList());
 }

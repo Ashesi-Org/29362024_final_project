@@ -11,6 +11,7 @@ import 'firebase_options.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'profilecard.dart';
 
+////////////// NO LONGER IN USE //////////////////////
 
 class currentUser extends StatefulWidget {
   const currentUser({Key? key}) : super(key: key);

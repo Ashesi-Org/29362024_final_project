@@ -44,10 +44,6 @@ Future<Map<String, String>> getPosterDetails(String id) async{
 }
 
 
-  // Stream currentUserStream(String imagename) async* {
-  //   String imageurl = await getImage(imagename);
-  // }
-
 var globalImage;
 
 void passer(imagename) {
@@ -61,29 +57,24 @@ void getImage(String imagename) async {
   globalImage = url;
 }
 
-// Future<String> getImage(String imagename) async {
-//   final ref = FirebaseStorage.instance.ref().child(imagename);
-//   var url = await ref.getDownloadURL();
-//
-//   return url;
-// }
+
 
 class _mainFeedState extends State<mainFeed> {
+  /*** A class that uses a serverless connection and a stream builder
+   * to listen for changes in the posts collection and render them
+   * using a predefined templated
+   */
   @override
   Widget build(BuildContext context) {
-    var globalUserID;
-    var globalPostContent;
-    var globalHasImage;
-    // var email;
-    // var detailsMap;
-
 
     final screenWidth = MediaQuery.of(context).size.width;
 
+    // Stream that connects to the posts database and orders by the post time
     final Stream<QuerySnapshot> usersStream =
-    FirebaseFirestore.instance.collection('posts').orderBy('posttime', descending: true).snapshots();
+    FirebaseFirestore.instance.collection('posts').orderBy('sortTime', descending: true).snapshots();
 
 
+    // Stream builder for th e
     return  Container(
       color: Colors.blueGrey.shade50,
       child: Container(
@@ -93,8 +84,9 @@ class _mainFeedState extends State<mainFeed> {
           stream: usersStream,
           builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (!snapshot.hasData) {
-              return Text("Loading Post...");
+              return Text("Loading Posts...");
             }
+            // get variables from snapshot and use to populate template
             final users = snapshot.data!.docs.map((DocumentSnapshot document) {
               final data = document.data() as Map<String, dynamic>;
               final name = data['username'] as String;
@@ -108,18 +100,7 @@ class _mainFeedState extends State<mainFeed> {
                 imageurl = data['imageurl'] as String;
                 imagename = data['imagename'] as String;}
 
-
-              // passer(imagename);
-              // print(imageurl);
-              // globalPostContent = data['text'].toString() as String;
-              // globalHasImage = data['hasimage'].toString() as String;
-
-
-              StreamController<String> streamController = StreamController();
-
-              // Stream imageStream = currentUserStream(imagename);
-
-                        // Use the user object returned by getuser() and data from the stream snapshot
+              // Returning a card with the content of the snapshot
                         return Column(
                           children: [
                             Card(

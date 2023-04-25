@@ -17,59 +17,48 @@ import 'package:image_picker_for_web/image_picker_for_web.dart';
 import 'editprofile.dart';
 
 
-// String receiveData(dataHandler passMe){
-//   String currentEmail = passMe.getData();
-//   return currentEmail;
-// }
-
 class profilecard extends StatefulWidget {
-  // final String userEmail;
-
 
   const profilecard({Key? key}) : super(key: key);
 
-  // const profilecard({);
-
-  // final dataHandler newHandler;
-  // profilecard({required this.newHandler});
 
   @override
   State<profilecard> createState() => _profilecardState();
 }
 
 class _profilecardState extends State<profilecard> {
+  /** A Class that performs all the tasks required to display the current user text field,
+   * user profile and the friends.
+   * Contains the depracated friendscard.dart
+   */
   final currentUserEmailController = TextEditingController();
   String currentEmail = '';
 
   void updateEmail(String email) {
+    // A method that updates the current email being used for the profile card
     setState(() {
       currentEmail = email;
-      // sendData();
     });
   }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   userData = '...'; // get user data
-  //   widget.newHandler.setData(userData);
-  // }
 
 
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    // final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    final Future<DocumentSnapshot> userData = FirebaseFirestore.instance
-        .collection('users')
-        .where('email', isEqualTo: 'samuel.blankson@ashesi.edu.gh')
-        .get()
-        .then((querySnapshot) => querySnapshot.docs.first);
+    // final Future<DocumentSnapshot> userData = FirebaseFirestore.instance
+    //     .collection('users')
+    //     .where('email', isEqualTo: 'samuel.blankson@ashesi.edu.gh')
+    //     .get()
+    //     .then((querySnapshot) => querySnapshot.docs.first);
 
     Future<Map<String, dynamic>?> fetchUrl() async {
+      /*** The method that fetches the users data from the firestore db and
+       * returns a json object which is then unpacked to build the profile card
+       */
       String apiLink = "https://us-central1-ashesistream-383012.cloudfunctions.net/streamUsers/users?email=";
       String apiRequest = apiLink + currentEmail;
       print("the current actual email is $currentEmail" );
@@ -80,42 +69,41 @@ class _profilecardState extends State<profilecard> {
         print(data);
         return data;
       } else {
-        print('Request failed with status: ${userData.statusCode}.');
+        print(userData.statusCode);
         return null;
       }
     }
 
-
+    // The stream for the current/viewed user
     Stream<QuerySnapshot> friendsStream() {
       return FirebaseFirestore.instance
           .collection('users')
-          .doc(currentEmail) // Replace with the ID of the document containing the sub-collection
-          .collection('friends') // Replace with the name of the sub-collection
+          .doc(currentEmail)
+          .collection('friends')
           .snapshots();
     }
 
-
+    // The future builder that builds the section for endering the user data
+    // previously the currentUser.dart
     return FutureBuilder<Map<String, dynamic>?>(
       future: fetchUrl(),
       builder: (BuildContext context, AsyncSnapshot<Map<String, dynamic>?> snapshot) {
         if (!snapshot.hasData) {
           return Column(
             children: [ Card(
-              // color: Colors.lightBlue.shade300,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16.0),
 
               ),
               child: Container(
 
-                // color: Colors.lightBlue.shade300,
                 width: screenWidth * 0.2,
                 height: 100,
                 child:
                 Column(
                   children: [
                     ListTile(
-                      title: const Text('Current User',
+                      title: const Text('Current User View',
                           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
                       subtitle: Text(
                           'Enter your ID to switch the current User!',
@@ -160,20 +148,12 @@ class _profilecardState extends State<profilecard> {
                 ),
               ),
             ),
-              // Card(
-              //   shape: RoundedRectangleBorder(
-              //     borderRadius: BorderRadius.circular(16.0),
-              //   ),
-              //   child: FractionallySizedBox(
-              //     widthFactor: 0.1,
-              //     child: CircularProgressIndicator(),
-              //   ),
-              // ),
             ],
           );
         }
 
-
+        // Unpacking the data from the send request which will be used for the
+        // profile card
         final data = snapshot.data;
         final name = data?['name'] as String; //
         final email = data?['email'] as String; //
@@ -189,15 +169,14 @@ class _profilecardState extends State<profilecard> {
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [Card(
-              // color: Colors.lightBlue.shade300,
+            children: [
+              // Card for entering your email
+              Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16.0),
 
               ),
               child: Container(
-
-                // color: Colors.lightBlue.shade300,
                 width: screenWidth * 0.2,
                 height: 100,
                 child:
@@ -205,7 +184,8 @@ class _profilecardState extends State<profilecard> {
                   children: [
                     ListTile(
                       title: const Text('Current User',
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)
+                      ),
                       subtitle: Text(
                           'Enter your ID to switch the current User!',
                           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)
@@ -236,8 +216,7 @@ class _profilecardState extends State<profilecard> {
                               padding: EdgeInsets.only(bottom: 2.0),
                               tooltip: "Confirm account switch",
                               onPressed: (){
-                                updateEmail(currentUserEmailController.text); //pass value to update email
-
+                                updateEmail(currentUserEmailController.text);
                               },
                             )
                           ],
@@ -249,6 +228,10 @@ class _profilecardState extends State<profilecard> {
                 ),
               ),
             ),
+
+
+
+              // The second card that shows the actual profile
               Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16.0),
@@ -278,10 +261,8 @@ class _profilecardState extends State<profilecard> {
                                  );
                                },
                              );
-
                            },
                            text: "Edit",
-                           // height:
                            type: GFButtonType.transparent,
                            hoverColor:Colors.blueGrey.shade50,
                            textColor: Colors.blue,
@@ -328,7 +309,6 @@ class _profilecardState extends State<profilecard> {
                            TextStyle(fontSize: 15),
                              textAlign: TextAlign.center,
                            ),
-
                          ],
                        ),
                        Column(
@@ -341,16 +321,13 @@ class _profilecardState extends State<profilecard> {
                            TextStyle(fontSize: 15),
                              textAlign: TextAlign.center,
                            ),
-
                          ],
                        )
                      ],
                    ),
-
                    SizedBox(
                      height: 5,
                    ),
-
                    ListTile(
                      title: Text("Bio:",textAlign: TextAlign.center,
                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
@@ -363,10 +340,12 @@ class _profilecardState extends State<profilecard> {
                      subtitle: Text(email, textAlign: TextAlign.center,),
                    )
                  ],
-
                ),
 
               ),
+
+                  // Third card that implements the friends list
+                  // previously the friendscard.dart
                   SingleChildScrollView(
                   child: Card(
                   shape: RoundedRectangleBorder(

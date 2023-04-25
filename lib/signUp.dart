@@ -29,8 +29,11 @@ class signUpPage extends StatefulWidget {
 }
 
 class _signUpPageState extends State<signUpPage> {
+  /*** A class that is responsible for the sign up popup ***/
+
   @override
   Widget build(BuildContext context) {
+    // Variables needef for state management
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final nameController = TextEditingController();
@@ -43,6 +46,7 @@ class _signUpPageState extends State<signUpPage> {
     final foodController = TextEditingController();
     final movieController = TextEditingController();
 
+    // Function to create a post request for sign up
     void uploadPost(String name,String email,String major,String year,
         String id, String residence, String dob, String movie,String food ) async{
 
@@ -63,6 +67,7 @@ class _signUpPageState extends State<signUpPage> {
       print(response.data);
     }
 
+    // The container that contains the form for sign up
     return Container(
       width: screenWidth*0.25,
       height: screenHeight*0.66,
@@ -95,9 +100,7 @@ class _signUpPageState extends State<signUpPage> {
                       child: TextFormField(
                         controller: nameController,
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                      // controller: posterEmailControler,
                       decoration: InputDecoration(
-                        // color: Colors.blueGrey.shade50,
                         labelText: 'Name',
                         border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.greenAccent),
@@ -117,9 +120,7 @@ class _signUpPageState extends State<signUpPage> {
                       child: TextFormField(
                         controller: emailController,
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                        // controller: posterEmailControler,
                         decoration: InputDecoration(
-                          // color: Colors.blueGrey.shade50,
                           labelText: 'Email',
                           border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.greenAccent),
@@ -139,9 +140,7 @@ class _signUpPageState extends State<signUpPage> {
                       child: TextFormField(
                         controller: majorController,
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                        // controller: posterEmailControler,
                         decoration: InputDecoration(
-                          // color: Colors.blueGrey.shade50,
                           labelText: 'Major',
                           border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.greenAccent),
@@ -161,9 +160,7 @@ class _signUpPageState extends State<signUpPage> {
                       child: TextFormField(
                         controller: yeargroupController,
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                        // controller: posterEmailControler,
                         decoration: InputDecoration(
-                          // color: Colors.blueGrey.shade50,
                           labelText: 'Year Group',
                           border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.greenAccent),
@@ -183,9 +180,7 @@ class _signUpPageState extends State<signUpPage> {
                       child: TextFormField(
                         controller: idController,
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                        // controller: posterEmailControler,
                         decoration: InputDecoration(
-                          // color: Colors.blueGrey.shade50,
                           labelText: 'ID',
                           border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.greenAccent),
@@ -205,9 +200,7 @@ class _signUpPageState extends State<signUpPage> {
                       child: TextFormField(
                         controller: residenceController,
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                        // controller: posterEmailControler,
                         decoration: InputDecoration(
-                          // color: Colors.blueGrey.shade50,
                           labelText: 'Residence',
                           border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.greenAccent),
@@ -227,9 +220,7 @@ class _signUpPageState extends State<signUpPage> {
                       child: TextFormField(
                         controller: dateofBirthController,
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                        // controller: posterEmailControler,
                         decoration: InputDecoration(
-                          // color: Colors.blueGrey.shade50,
                           labelText: 'Date of Birth',
                           border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.greenAccent),
@@ -249,9 +240,7 @@ class _signUpPageState extends State<signUpPage> {
                       child: TextFormField(
                         controller: movieController,
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                        // controller: posterEmailControler,
                         decoration: InputDecoration(
-                          // color: Colors.blueGrey.shade50,
                           labelText: 'Favorite Movie',
                           border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.greenAccent),
@@ -271,9 +260,7 @@ class _signUpPageState extends State<signUpPage> {
                       child: TextFormField(
                         controller: foodController,
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                        // controller: posterEmailControler,
                         decoration: InputDecoration(
-                          // color: Colors.blueGrey.shade50,
                           labelText: 'Favorite Food',
                           border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.greenAccent),
@@ -289,6 +276,7 @@ class _signUpPageState extends State<signUpPage> {
                     child:
                     GFButton(
                       onPressed: (){
+                        // Upload the data to create an account
                         uploadPost(nameController.text, emailController.text,
                             majorController.text, yeargroupController.text,
                             idController.text, residenceController.text,
@@ -300,15 +288,9 @@ class _signUpPageState extends State<signUpPage> {
                       shape: GFButtonShape.pills,
                     ),
                   ),
-
-
-
-
                 ]
                   ,)
                 ),
-
-
               ],
             ),
           ],
