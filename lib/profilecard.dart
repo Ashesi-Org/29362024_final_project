@@ -183,7 +183,7 @@ class _profilecardState extends State<profilecard> {
                 Column(
                   children: [
                     ListTile(
-                      title: const Text('Current User',
+                      title: const Text('Current User View',
                           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)
                       ),
                       subtitle: Text(
