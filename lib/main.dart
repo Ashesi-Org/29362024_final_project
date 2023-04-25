@@ -17,6 +17,8 @@ import 'package:getwidget/getwidget.dart';
 import 'friendscard.dart';
 import 'dataHandler.dart';
 import 'sendpostcard.dart';
+import 'signUp.dart';
+
 
 
 void main() async {
@@ -44,7 +46,9 @@ void main() async {
 
   runApp(MaterialApp(
     title: "Ashesi Stream",
+    // home: signUpPage(),
     home: ThreeColumnLayout(),
+
       theme: ThemeData(
         dividerTheme: const DividerThemeData(
           space: 0, // set vertical space to 0
@@ -111,7 +115,7 @@ class _ThreeColumnLayoutState extends State<ThreeColumnLayout> {
                 children: [
                   // SizedBox(height: 16,),
                   // currentUser(),
-                  SizedBox(height: 8),
+                  // SizedBox(height: 8),
                   Center(
 
                     child: Column(
@@ -135,12 +139,29 @@ class _ThreeColumnLayoutState extends State<ThreeColumnLayout> {
                       // height: 10,
                       child:
                       GFButton(
-                        onPressed: (){},
+                        onPressed: (){
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Dialog(
+                                 shape: RoundedRectangleBorder(
+                                   borderRadius: BorderRadius.circular(16.0),
+                                ),
+                                child: Container(
+
+                                  width: screenWidth *0.25,
+                                    height: screenHeight * 0.66,
+                                    child: signUpPage()),
+                              );
+                            },
+                          );
+
+
+                        },
                         text: "Need an account? Sign up!",
                         // hoverColor: Colors.green,
                         type: GFButtonType.transparent,
                         hoverColor:Colors.blueGrey.shade50,
-                        // color: Colors.lightBlue.shade300 ,
                         textColor: Colors.blue,
                         shape: GFButtonShape.pills,
                       ),

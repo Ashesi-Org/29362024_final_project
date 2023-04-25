@@ -15,6 +15,12 @@ class allUsers extends StatefulWidget {
 
 
 class _allUsersState extends State<allUsers> {
+  /** A class that uses a serverless connection to show all the users in
+   * the database. Connets to firebase without the use of the API
+   */
+
+
+  // A stream that connects to users stream
   final Stream<QuerySnapshot> usersStream =
   FirebaseFirestore.instance.collection('users').orderBy("name",descending: true).snapshots();
 
@@ -32,7 +38,7 @@ class _allUsersState extends State<allUsers> {
             Container(
               width: screenWidth * 0.15,
               child: ListTile(
-                title: const Text('Active Users',
+                title: const Text('All Users',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
                 subtitle: Text(
                     'Connect with new people!',
@@ -79,7 +85,7 @@ class _allUsersState extends State<allUsers> {
                     icon: Icon(Icons.person_add_alt_1),
                     tooltip: "Send $name a friend request",
                     onPressed: () {
-                    // TODO: add http request
+                    // TODO: add http request for the friend request
                           },
                         ),
                       ],
@@ -115,31 +121,3 @@ class _allUsersState extends State<allUsers> {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// void getList() async {
-//   await Firebase.initializeApp(
-//     options: DefaultFirebaseOptions.currentPlatform,
-//   );
-//
-//   FirebaseFirestore db = FirebaseFirestore.instance;
-//
-//   CollectionReference users = db.collection('users');
-//   QuerySnapshot querySnapshot = await users.get();
-//   List<QueryDocumentSnapshot> documents = querySnapshot.docs;
-//   for (var document in documents) {
-//     print(document.data());
-//
-//
-//   }

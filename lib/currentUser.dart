@@ -14,41 +14,24 @@ import 'profilecard.dart';
 
 class currentUser extends StatefulWidget {
   const currentUser({Key? key}) : super(key: key);
-  // final dataHandler newHandler;
-
-  // currentUser({required this.newHandler});
-
 
   @override
   State<currentUser> createState() => _currentUserState();
 }
 
 class _currentUserState extends State<currentUser> {
+  /** A class that renders the textbox to switch to/view a user **/
+
+  // Variables needed for state management
   final currentUserEmailController = TextEditingController();
   String currentEmail = '';
+  String userData = '';
 
   void updateEmail(String email) {
     setState(() {
       currentEmail = email;
-      // sendData();
     });
   }
-
-  // void sendData() {
-  //   dataHandler passMe = dataHandler(email: currentEmail);
-  //   receiveData(passMe);
-  //
-  //   return;
-  // }
-
-  String userData = '';
-  //
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   userData = '...'; // get user data
-  //   widget.newHandler.setData(userData);
-  // }
 
 
 
@@ -57,18 +40,12 @@ class _currentUserState extends State<currentUser> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
-    // passing the current email to the profile card
-    // profilecard(email: currentEmail);
-
     return Card(
-      // color: Colors.lightBlue.shade300,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.0),
 
       ),
       child: Container(
-
-        // color: Colors.lightBlue.shade300,
         width: screenWidth * 0.2,
         height: 100,
         child:

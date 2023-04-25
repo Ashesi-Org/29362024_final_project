@@ -1,16 +1,20 @@
 import 'dart:async';
+import 'package:final_project/editprofile.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:getwidget/components/button/gf_button.dart';
 import 'firebase_options.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:getwidget/getwidget.dart';
 import 'dataHandler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker_for_web/image_picker_for_web.dart';
+import 'editprofile.dart';
 
 
 // String receiveData(dataHandler passMe){
@@ -19,7 +23,7 @@ import 'package:image_picker_for_web/image_picker_for_web.dart';
 // }
 
 class profilecard extends StatefulWidget {
-  // final String currentEmail;
+  // final String userEmail;
 
 
   const profilecard({Key? key}) : super(key: key);
@@ -34,15 +38,6 @@ class profilecard extends StatefulWidget {
 }
 
 class _profilecardState extends State<profilecard> {
-  // late Future<String> curUserData;
-  // late Future<String> currentEmail;
-
-  // String receiveData(dataHandler passMe){
-  //   String currentEmail = passMe.getData();
-  //   return currentEmail;
-  // }
-
-  // String userData = '';
   final currentUserEmailController = TextEditingController();
   String currentEmail = '';
 
@@ -65,6 +60,8 @@ class _profilecardState extends State<profilecard> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    // final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     final Future<DocumentSnapshot> userData = FirebaseFirestore.instance
         .collection('users')
@@ -75,7 +72,7 @@ class _profilecardState extends State<profilecard> {
     Future<Map<String, dynamic>?> fetchUrl() async {
       String apiLink = "https://us-central1-ashesistream-383012.cloudfunctions.net/streamUsers/users?email=";
       String apiRequest = apiLink + currentEmail;
-      print("the current email is $currentEmail" );
+      print("the current actual email is $currentEmail" );
       final userData = await http.get(Uri.parse(apiRequest));
       print("Got response");
       if (userData.statusCode == 200) {
@@ -188,11 +185,6 @@ class _profilecardState extends State<profilecard> {
         String residence = data?['residence'].toString() as String;
         final friendcount = data?['friendcount'].toString() as String; //
         final dob = data?['dob'] as String;
-        // if (residence == "false") {
-        //   residence = "Off-Campus";
-        // } else {
-        //   residence = "On-Campus";
-        // }
 
         return Center(
           child: Column(
@@ -263,7 +255,42 @@ class _profilecardState extends State<profilecard> {
                 ),
                child: Column(
                  children: [
-                   SizedBox(height: 5,),
+                   SizedBox(
+                     height: 12,
+                     // width: 10,
+                     child: Row(
+                       mainAxisAlignment: MainAxisAlignment.end,
+                       children: [
+                         GFButton(
+                           onPressed: (){
+                             showDialog(
+                               context: context,
+                               builder: (BuildContext context) {
+                                 return Dialog(
+                                   shape: RoundedRectangleBorder(
+                                     borderRadius: BorderRadius.circular(16.0),
+                                   ),
+                                   child: Container(
+                                       width: screenWidth *0.25,
+                                       height: screenHeight * 0.5,
+                                       child: editprofilecard(userEmail: currentEmail),
+                                   )
+                                 );
+                               },
+                             );
+
+                           },
+                           text: "Edit",
+                           // height:
+                           type: GFButtonType.transparent,
+                           hoverColor:Colors.blueGrey.shade50,
+                           textColor: Colors.blue,
+                           shape: GFButtonShape.pills,
+                         ),
+                       ],
+                     ),
+                   ),
+                   // SizedBox(height: 5,),
                    ProfilePicture(
                      name: name,
                      radius: 30,
@@ -340,84 +367,84 @@ class _profilecardState extends State<profilecard> {
                ),
 
               ),
-        SingleChildScrollView(
-        child: Card(
-        shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16.0),
-        ),
-        child: Column(
-        children: [
-        Container(
-        width: screenWidth * 0.2,
-        child: ListTile(
-        title: const Text('Friends',
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-        subtitle: Text(
-        'All your friends in one place',
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)
-        ),
-        ),
-        ),
-        Container(
-        width: screenWidth * 0.2,
-        height: 220,
-        child: StreamBuilder<QuerySnapshot>(
-        stream: friendsStream(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (!snapshot.hasData) {
-        return const Text('Loading Users');
-        }
-        final users = snapshot.data!.docs.map((DocumentSnapshot document) {
-        final data = document.data() as Map<String, dynamic>;
-        final name = data['name'] as String;
-        final yeargroup = data['yeargroup'].toString() as String;
-        final email = data['email'].toString() as String;
-        return Column(
-        children: [
-        Row(
-        children: [
-        SizedBox(width: 10,),
-        ProfilePicture(
-        name: name,
-        radius: 22,
-        fontsize: 17,
-        random: true,
-        role: email ,
-        tooltip: true,
-        ),
-        Expanded(
-        child: ListTile(
-        title: Text(name,
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-        subtitle: Text(yeargroup,
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
-        ),
-        ),
-        IconButton(
-        icon: Icon(Icons.remove_red_eye),
-        tooltip: "View $name\'s profile",
-        onPressed: () {
-        // TODO: add http request
-        },
-        ),
-        ],
-        ),
-        const Divider(
-        thickness: 1,
-        ),
-        ],
-        );
-        }).toList();
-        return ListView(
-        children: users,
-        );
-        },
-        ),
-        ),
-        ],
-        ),
-        ),
-        ),
+                  SingleChildScrollView(
+                  child: Card(
+                  shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16.0),
+                  ),
+                  child: Column(
+                  children: [
+                  Container(
+                  width: screenWidth * 0.2,
+                  child: ListTile(
+                  title: const Text('Friends',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                  subtitle: Text(
+                  'All your friends in one place',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)
+                  ),
+                  ),
+                  ),
+                  Container(
+                  width: screenWidth * 0.2,
+                  height: 220,
+                  child: StreamBuilder<QuerySnapshot>(
+                  stream: friendsStream(),
+                  builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (!snapshot.hasData) {
+                  return const Text('Loading Users');
+                  }
+                  final users = snapshot.data!.docs.map((DocumentSnapshot document) {
+                  final data = document.data() as Map<String, dynamic>;
+                  final name = data['name'] as String;
+                  final yeargroup = data['yeargroup'].toString() as String;
+                  final email = data['email'].toString() as String;
+                  return Column(
+                  children: [
+                  Row(
+                  children: [
+                  SizedBox(width: 10,),
+                  ProfilePicture(
+                  name: name,
+                  radius: 22,
+                  fontsize: 17,
+                  random: true,
+                  role: email ,
+                  tooltip: true,
+                  ),
+                  Expanded(
+                  child: ListTile(
+                  title: Text(name,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                  subtitle: Text(yeargroup,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                  ),
+                  ),
+                  IconButton(
+                  icon: Icon(Icons.remove_red_eye),
+                  tooltip: "View $name\'s profile",
+                  onPressed: () {
+                  // TODO: add http request
+                  },
+                  ),
+                  ],
+                  ),
+                  const Divider(
+                  thickness: 1,
+                  ),
+                  ],
+                  );
+                  }).toList();
+                  return ListView(
+                  children: users,
+                  );
+                  },
+                  ),
+                  ),
+                  ],
+                  ),
+                  ),
+                  ),
 
 
         ],

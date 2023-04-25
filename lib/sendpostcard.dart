@@ -107,7 +107,7 @@ class _sendPostCardState extends State<sendPostCard> {
          "hasimage" : 'false',
        });
      }else {
-       String? imagePath = imageFile?.path;
+       // String? imagePath = imageFile?.path;
        final bytes = await imageFile.readAsBytes();
        formData = FormData.fromMap({
          "text": postContent,
